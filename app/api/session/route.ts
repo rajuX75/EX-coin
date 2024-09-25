@@ -1,3 +1,5 @@
+// api/session
+
 import { getSession } from "@/utils/session";
 import { NextResponse } from "next/server";
 
