@@ -29,6 +29,9 @@ export default function Home() {
         initData={initData}
         userId={userId}
         startParam={startParam}
+        onBack={() => {
+          // Handle navigation back to the previous screen or main menu
+        }}
       />
     </main>
   );
