@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { initUtils } from "@telegram-apps/sdk";
-import { motion } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Share2, Copy, Users } from "lucide-react";
+import { Share2, Copy, Users, Gift, Sparkles } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface ReferralSystemProps {
   initData: string;
@@ -22,7 +30,8 @@ const ReferralSystem: React.FC<ReferralSystemProps> = ({
   const [referrals, setReferrals] = useState<string[]>([]);
   const [referrer, setReferrer] = useState<string | null>(null);
   const [inviteLink, setInviteLink] = useState("");
-  const INVITE_URL = "https://t.me/excoin_rjx_bot/start";
+  const [copied, setCopied] = useState(false);
+  const INVITE_URL = "https://t.me/excoin_rjx_bot/";
 
   useEffect(() => {
     const checkReferral = async () => {
@@ -73,20 +82,28 @@ const ReferralSystem: React.FC<ReferralSystemProps> = ({
     alert("Invite link copied to clipboard!");
   };
 
+  const calculateProgress = () => {
+    const goal = 10;
+    return (referrals.length / goal) * 100;
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="w-full max-w-md mx-auto p-4"
+      className="w-full max-w-xl mx-auto p-4 space-y-6"
     >
-      <Card className="mb-8">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">
-            Referral System
+      <Card className="overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+          <CardTitle className="text-3xl font-bold text-center">
+            <Sparkles className="inline-block mr-2" /> Referral Program
           </CardTitle>
+          <CardDescription className="text-center text-white/80">
+            Invite friends and earn rewards!
+          </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-6">
           {referrer && (
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -94,61 +111,105 @@ const ReferralSystem: React.FC<ReferralSystemProps> = ({
               transition={{ delay: 0.2 }}
               className="mb-4"
             >
-              <Badge variant="secondary" className="text-sm">
-                Referred by user {referrer}
+              <Badge variant="secondary" className="text-sm px-3 py-1">
+                🎉 Referred by user {referrer}
               </Badge>
             </motion.div>
           )}
           <div className="space-y-4">
-            <Input
-              value={inviteLink}
-              readOnly
-              className="bg-gray-100 text-sm"
-            />
-            <div className="flex space-x-2">
-              <Button onClick={handleInviteFriend} className="flex-1">
-                <Share2 className="mr-2 h-4 w-4" /> Invite Friend
-              </Button>
-              <Button onClick={handleCopyLink} variant="outline" className="flex-1">
-                <Copy className="mr-2 h-4 w-4" /> Copy Link
+            <div className="relative">
+              <Input
+                value={inviteLink}
+                readOnly
+                className="bg-gray-100 text-sm pr-24"
+              />
+              <Button
+                onClick={handleCopyLink}
+                variant="ghost"
+                size="sm"
+                className="absolute right-1 top-1/2 transform -translate-y-1/2"
+              >
+                {copied ? "Copied!" : "Copy"}
               </Button>
             </div>
+            <Button
+              onClick={handleInviteFriend}
+              className="w-full bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white"
+            >
+              <Share2 className="mr-2 h-5 w-5" /> Invite Friend
+            </Button>
           </div>
         </CardContent>
       </Card>
 
-      {referrals.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
-        >
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-xl font-semibold flex items-center">
-                <Users className="mr-2" /> Your Referrals
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2">
-                {referrals.map((referral, index) => (
-                  <motion.li
-                    key={index}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 * index }}
-                    className="flex items-center space-x-2 p-2 bg-gray-100 rounded-md"
-                  >
-                    <Avatar>
-                      <AvatarFallback>{referral.charAt(0).toUpperCase()}</AvatarFallback>
-                    </Avatar>
-                    <span>User {referral}</span>
-                  </motion.li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-        </motion.div>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold flex items-center">
+            <Gift className="mr-2 text-purple-500" /> Your Progress
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            <Progress value={calculateProgress()} className="w-full" />
+            <p className="text-sm text-gray-600 text-center">
+              {referrals.length}/10 referrals to next reward
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
+      <AnimatePresence>
+        {referrals.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+          >
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-xl font-semibold flex items-center">
+                  <Users className="mr-2 text-blue-500" /> Your Referrals
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-3">
+                  {referrals.map((referral, index) => (
+                    <motion.li
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 * index }}
+                      className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg shadow-sm"
+                    >
+                      <Avatar>
+                        <AvatarImage
+                          src={`https://api.dicebear.com/6.x/initials/svg?seed=${referral}`}
+                        />
+                        <AvatarFallback>
+                          {referral.charAt(0).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="font-medium">User {referral}</p>
+                        <p className="text-sm text-gray-500">Joined recently</p>
+                      </div>
+                    </motion.li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {referrals.length === 0 && (
+        <Alert>
+          <AlertTitle>No referrals yet</AlertTitle>
+          <AlertDescription>
+            Start inviting friends to earn rewards and see them listed here!
+          </AlertDescription>
+        </Alert>
       )}
     </motion.div>
   );
