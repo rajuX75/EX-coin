@@ -5,7 +5,7 @@ interface ReferralData {
 
 let storage: ReferralData = {
   referrals: {},
-  referredBy: {},
+  referredBy: {}
 };
 
 export function saveReferral(userId: string, referrerId: string) {

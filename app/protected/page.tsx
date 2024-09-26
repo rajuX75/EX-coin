@@ -3,10 +3,10 @@
 import ReferralSystem from "@/components/ReferralSystem";
 import { useEffect, useState } from "react";
 
-export default function ProtectedPage() {
-  const [initData, setInitData] = useState<string>("");
-  const [userId, setUserId] = useState<string>("");
-  const [startParams, setStartParams] = useState<string>("");
+export default function Home() {
+  const [initData, setInitData] = useState("");
+  const [userId, setUserId] = useState("");
+  const [startParam, setStartParam] = useState("");
 
   useEffect(() => {
     const initWebApp = async () => {
@@ -15,19 +15,21 @@ export default function ProtectedPage() {
         WebApp.ready();
         setInitData(WebApp.initData);
         setUserId(WebApp.initDataUnsafe.user?.id.toString() || "");
-        setStartParams(WebApp.initDataUnsafe.start_param || "");
+        setStartParam(WebApp.initDataUnsafe.start_param || "");
       }
     };
+
     initWebApp();
   }, []);
+
   return (
-    <div className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1 className="text-4xl font-bold mb-8">Home Page</h1>
+    <main className="flex min-h-screen flex-col items-center justify-center p-24">
+      <h1 className="text-4xl font-bold mb-8">Home | Referral</h1>
       <ReferralSystem
         initData={initData}
         userId={userId}
-        startParams={startParams}
+        startParam={startParam}
       />
-    </div>
+    </main>
   );
 }
