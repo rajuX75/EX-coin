@@ -1,19 +1,27 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from 'framer-motion';
-import { useToast } from '@/hooks/use-toast';
+import { motion, AnimatePresence } from "framer-motion";
+import { useToast } from "@/hooks/use-toast";
 import { Toast } from "@/components/ui/toast";
+import { FaTelegram, FaFacebook, FaYoutube, FaWallet, FaChartLine, FaExchangeAlt, FaLock } from 'react-icons/fa';
 
 const EXcoinLoadingPage = () => {
-  const [miningProgress, setMiningProgress] = useState(0);
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
   const [currentInfo, setCurrentInfo] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [tapPosition, setTapPosition] = useState({ x: 0, y: 0 });
   const [showRipple, setShowRipple] = useState(false);
+  const [miningProgress, setMiningProgress] = useState(0);
+  const [coinRotation, setCoinRotation] = useState(0);
+  const [activeTab, setActiveTab] = useState('mine');
   const router = useRouter();
   const { toast } = useToast();
 
@@ -21,7 +29,9 @@ const EXcoinLoadingPage = () => {
     "EXcoin uses advanced quantum-resistant algorithms",
     "Our blockchain can process 100,000 transactions per second",
     "EXcoin is committed to 100% renewable energy mining",
-    "Join our community of over 1 million early adopters"
+    "Join our community of over 1 million early adopters",
+    "Decentralized finance made easy with EXcoin",
+    "Instant, fee-less transactions across the globe",
   ];
 
   const checkAuth = useCallback(async () => {
@@ -45,12 +55,8 @@ const EXcoinLoadingPage = () => {
   useEffect(() => {
     checkAuth();
 
-    const interval = setInterval(() => {
-      setMiningProgress(prev => (prev < 100 ? prev + 1 : 0));
-    }, 1000);
-
     const countdownInterval = setInterval(() => {
-      const launchDate = new Date('2025-01-01T00:00:00').getTime();
+      const launchDate = new Date("2025-01-01T00:00:00").getTime();
       const now = new Date().getTime();
       const distance = launchDate - now;
 
@@ -58,18 +64,27 @@ const EXcoinLoadingPage = () => {
         days: Math.floor(distance / (1000 * 60 * 60 * 24)),
         hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
         minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-        seconds: Math.floor((distance % (1000 * 60)) / 1000)
+        seconds: Math.floor((distance % (1000 * 60)) / 1000),
       });
     }, 1000);
 
     const infoInterval = setInterval(() => {
-      setCurrentInfo(prev => (prev + 1) % infoItems.length);
+      setCurrentInfo((prev) => (prev + 1) % infoItems.length);
     }, 5000);
 
+    const miningInterval = setInterval(() => {
+      setMiningProgress((prev) => (prev + 1) % 101);
+    }, 100);
+
+    const coinRotationInterval = setInterval(() => {
+      setCoinRotation((prev) => (prev + 5) % 360);
+    }, 50);
+
     return () => {
-      clearInterval(interval);
       clearInterval(countdownInterval);
       clearInterval(infoInterval);
+      clearInterval(miningInterval);
+      clearInterval(coinRotationInterval);
     };
   }, [checkAuth]);
 
@@ -126,122 +141,160 @@ const EXcoinLoadingPage = () => {
     }
   };
 
-  const gradientTextClass = "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600";
+  const gradientTextClass = "text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-600";
 
   return (
-    <div 
-      className="min-h-screen bg-gray-900 flex flex-col items-center justify-between p-6 relative overflow-hidden cursor-pointer"
-      onClick={handleTap}
-    >
-      {/* SVG Background */}
-      <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(59, 130, 246, 0.1)" strokeWidth="1"/>
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#grid)" />
-      </svg>
+    <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-between p-4 relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900"></div>
+        <div className="absolute inset-0 opacity-30">
+          {[...Array(30)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute rounded-full bg-emerald-500"
+              style={{
+                width: Math.random() * 6 + 2 + "px",
+                height: Math.random() * 6 + 2 + "px",
+                top: Math.random() * 100 + "%",
+                left: Math.random() * 100 + "%",
+                animation: `float ${Math.random() * 10 + 5}s linear infinite`,
+              }}
+            ></div>
+          ))}
+        </div>
+      </div>
 
-      {/* Enhanced Water Ripple Effect */}
+      {/* Ripple Effect */}
       <AnimatePresence>
         {showRipple && (
           <motion.div
-            className="absolute rounded-full bg-gradient-to-r from-blue-400 to-purple-600 opacity-50"
+            className="absolute rounded-full bg-gradient-to-r from-emerald-400 to-teal-600 opacity-30"
             style={{ left: tapPosition.x, top: tapPosition.y }}
             initial={{ width: 0, height: 0 }}
-            animate={{ width: 500, height: 500, opacity: 0 }}
+            animate={{ width: 300, height: 300, opacity: 0 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
+            transition={{ duration: 1, ease: "easeOut" }}
             onAnimationComplete={() => setShowRipple(false)}
           />
         )}
       </AnimatePresence>
 
-      <div className="z-10 w-full max-w-xs space-y-8">
-        <h1 className={`text-5xl font-bold text-center mb-2 ${gradientTextClass} animate-pulse`}>EXcoin</h1>
-        <p className="text-lg text-center mb-4 text-blue-200">The Future of Crypto</p>
+      <header className="w-full text-center z-10">
+        <h1 className={`text-5xl font-bold mb-2 ${gradientTextClass}`}>
+          EXcoin
+        </h1>
+        <p className="text-lg text-emerald-200">
+          The Future of Crypto
+        </p>
+      </header>
 
-        {/* Improved Visualizer Loader */}
-        <div className="relative w-full h-64">
-          <svg className="w-full h-full" viewBox="0 0 200 200">
-            <defs>
-              <linearGradient id="loaderGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#3B82F6" />
-                <stop offset="100%" stopColor="#8B5CF6" />
-              </linearGradient>
-            </defs>
-            {[...Array(12)].map((_, index) => (
-              <motion.rect
-                key={index}
-                x={97}
-                y={20}
-                width="6"
-                height="60"
-                rx="3"
-                fill="url(#loaderGradient)"
-                transform={`rotate(${index * 30} 100 100)`}
-                animate={{
-                  scaleY: [1, 1.8, 1],
-                  opacity: [0.5, 1, 0.5],
-                }}
-                transition={{
-                  duration: 1.2,
-                  repeat: Infinity,
-                  delay: index * 0.1,
-                }}
-              />
-            ))}
-            <circle
-              cx="100"
-              cy="100"
-              r="60"
-              fill="none"
-              stroke="url(#loaderGradient)"
-              strokeWidth="4"
-              strokeDasharray={`${miningProgress * 3.77} 377`}
-              transform="rotate(-90 100 100)"
+      <main className="flex-grow flex flex-col items-center justify-center w-full max-w-md space-y-6 z-10">
+        {/* Coin Animation */}
+        <div className="relative w-40 h-40">
+          <motion.div
+            className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-400 to-teal-600"
+            style={{ rotate: coinRotation }}
+          />
+          <div className="absolute inset-2 rounded-full bg-gray-900 flex items-center justify-center">
+            <span className={`text-3xl font-bold ${gradientTextClass}`}>EX</span>
+          </div>
+        </div>
+
+        {/* Mining Progress */}
+        <div className="w-full bg-gray-800 bg-opacity-30 rounded-lg p-4 backdrop-blur-sm">
+          <p className="text-emerald-200 text-center mb-2">Mining Progress</p>
+          <div className="w-full bg-gray-700 rounded-full h-2.5">
+            <motion.div
+              className="bg-emerald-500 h-2.5 rounded-full"
+              initial={{ width: "0%" }}
+              animate={{ width: `${miningProgress}%` }}
+              transition={{ duration: 0.5 }}
             />
-            <text x="100" y="100" textAnchor="middle" dy="0.3em" fill="#ffffff" fontSize="24" fontWeight="bold">
-              {miningProgress}%
-            </text>
-          </svg>
+          </div>
+          <p className="text-emerald-200 text-center mt-2">{miningProgress}%</p>
         </div>
 
         {/* Countdown */}
-        <div className="bg-gray-800 bg-opacity-50 rounded-lg p-4 backdrop-blur-sm">
+        <div className="w-full bg-gray-800 bg-opacity-30 rounded-lg p-4 backdrop-blur-sm">
           <div className="grid grid-cols-4 gap-2 text-center">
             {Object.entries(timeLeft).map(([unit, value]) => (
-              <div key={unit}>
-                <p className={`text-xl font-bold ${gradientTextClass}`}>{value}</p>
-                <p className="text-xs text-gray-300">{unit.charAt(0).toUpperCase()}</p>
+              <div key={unit} className="flex flex-col items-center">
+                <p className={`text-2xl font-bold ${gradientTextClass}`}>
+                  {value}
+                </p>
+                <p className="text-xs text-emerald-200">
+                  {unit.charAt(0).toUpperCase() + unit.slice(1)}
+                </p>
               </div>
             ))}
           </div>
         </div>
 
         {/* Info Carousel */}
-        <div className="h-16 bg-gray-800 bg-opacity-50 rounded-lg p-4 backdrop-blur-sm flex items-center justify-center">
-          <p className="text-sm text-blue-200 text-center">{infoItems[currentInfo]}</p>
+        <div className="h-16 w-full bg-gray-800 bg-opacity-30 rounded-lg p-2 backdrop-blur-sm flex items-center justify-center">
+          <p className="text-sm text-emerald-200 text-center">
+            {infoItems[currentInfo]}
+          </p>
         </div>
 
-        {/* Tap Instruction */}
-        <p className="text-blue-200 text-center animate-pulse">
-          {isAuthenticated
-            ? "Tap anywhere to access the protected page"
-            : "Tap anywhere to authenticate and continue"}
-        </p>
-
-        {/* Loading Indicator */}
-        {isLoading && (
-          <div className="flex justify-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+        {/* Feature Tabs */}
+        <div className="w-full bg-gray-800 bg-opacity-30 rounded-lg p-2 backdrop-blur-sm">
+          <div className="flex justify-around mb-2">
+            {[
+              { id: 'mine', icon: FaWallet, label: 'Mine' },
+              { id: 'trade', icon: FaExchangeAlt, label: 'Trade' },
+              { id: 'stats', icon: FaChartLine, label: 'Stats' },
+              { id: 'secure', icon: FaLock, label: 'Secure' },
+            ].map(({ id, icon: Icon, label }) => (
+              <motion.button
+                key={id}
+                className={`flex flex-col items-center p-2 rounded-lg ${
+                  activeTab === id ? 'bg-emerald-500' : 'bg-gray-700'
+                }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setActiveTab(id)}
+              >
+                <Icon className="text-xl text-emerald-200 mb-1" />
+                <span className="text-xs text-emerald-200">{label}</span>
+              </motion.button>
+            ))}
           </div>
-        )}
-      </div>
+          <div className="text-emerald-200 text-center text-sm mb-8">
+            {activeTab === 'mine' && 'Mine EXcoin with your device'}
+            {activeTab === 'trade' && 'Trade EXcoin securely'}
+            {activeTab === 'stats' && 'View your mining statistics'}
+            {activeTab === 'secure' && 'Enhance your account security'}
+          </div>
+        </div>
+      </main>
 
-      <footer className="text-center text-xs text-blue-200 z-10">
-        <p>EXcoin &copy; 2024-2025 | v0.6.0</p>
+      <footer className="w-full text-center z-10 mt-4">
+        {/* Social Buttons */}
+        <div className="flex justify-center space-x-4 mb-4">
+          {[
+            { Icon: FaTelegram, color: "blue", link: "https://t.me/excoin" },
+            { Icon: FaFacebook, color: "blue", link: "https://facebook.com/excoin" },
+            { Icon: FaYoutube, color: "red", link: "https://youtube.com/excoin" },
+          ].map(({ Icon, color, link }) => (
+            <motion.a
+              key={link}
+              href={link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`text-2xl text-${color}-500 hover:text-${color}-400`}
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <Icon />
+            </motion.a>
+          ))}
+        </div>
+
+        <p className="text-emerald-200 text-xs">
+          EXcoin &copy; 2024-2025 | v0.8.0
+        </p>
       </footer>
 
       <Toast />
