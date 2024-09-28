@@ -1,15 +1,12 @@
-import TelegramAuth from '@/components/TelegramAuth';
-import { getSession } from '@/utils/session';
+// import TelegramAuth from '@/components/TelegramAuth';
+// import { getSession } from '@/utils/session';
+// const session = await getSession()
+// <pre>{JSON.stringify(session, null, 2)}</pre>
+import EXcoinLoadingPage from "@/components/LandingPage";
+import React from "react";
 
+const page = () => {
+  return <EXcoinLoadingPage />;
+};
 
-export default async function Home() {
-  const session = await getSession()
-
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-4xl font-bold mb-8">Jwt Authentication for Telegram Mini Apps</h1>
-      <pre>{JSON.stringify(session, null, 2)}</pre>
-      <TelegramAuth />
-    </main>
-  )
-}
+export default page;

@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
 
+
 export default function TelegramAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -79,6 +80,7 @@ export default function TelegramAuth() {
           >
             Authenticate
           </button>
+          
         </>
       )}
     </div>
