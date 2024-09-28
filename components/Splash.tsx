@@ -182,7 +182,7 @@ export default function SplashScreen() {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.7, duration: 0.5 }}
       >
-        Now in mining state! <br /> Launching soon on Binance and BTbit!
+        Now in mining state! <br /> Launching soon on Binance and BYbit!
       </motion.p>
 
       <div className="w-64 mb-8">
