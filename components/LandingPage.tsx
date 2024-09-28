@@ -47,7 +47,7 @@ const EXcoinLoadingPage = () => {
 
     const interval = setInterval(() => {
       setMiningProgress(prev => (prev < 100 ? prev + 1 : 0));
-    }, 1000); // Faster update
+    }, 1000);
 
     const countdownInterval = setInterval(() => {
       const launchDate = new Date('2025-01-01T00:00:00').getTime();
@@ -94,6 +94,7 @@ const EXcoinLoadingPage = () => {
             title: "Authentication Successful",
             description: "Welcome to EXcoin!",
           });
+          router.push("/protected");
         } else {
           throw new Error("Authentication failed");
         }
@@ -114,10 +115,14 @@ const EXcoinLoadingPage = () => {
   };
 
   const handleTap = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (!isLoading && !isAuthenticated) {
-      setTapPosition({ x: event.clientX, y: event.clientY });
-      setShowRipple(true);
-      authenticateUser();
+    setTapPosition({ x: event.clientX, y: event.clientY });
+    setShowRipple(true);
+    if (!isLoading) {
+      if (isAuthenticated) {
+        router.push("/protected");
+      } else {
+        authenticateUser();
+      }
     }
   };
 
@@ -125,7 +130,7 @@ const EXcoinLoadingPage = () => {
 
   return (
     <div 
-      className="min-h-screen bg-gray-900 flex flex-col items-center justify-between p-6 relative overflow-hidden"
+      className="min-h-screen bg-gray-900 flex flex-col items-center justify-between p-6 relative overflow-hidden cursor-pointer"
       onClick={handleTap}
     >
       {/* SVG Background */}
@@ -138,15 +143,16 @@ const EXcoinLoadingPage = () => {
         <rect width="100%" height="100%" fill="url(#grid)" />
       </svg>
 
-      {/* Water Ripple Effect */}
+      {/* Enhanced Water Ripple Effect */}
       <AnimatePresence>
         {showRipple && (
           <motion.div
-            className="absolute rounded-full bg-blue-500 opacity-50"
+            className="absolute rounded-full bg-gradient-to-r from-blue-400 to-purple-600 opacity-50"
             style={{ left: tapPosition.x, top: tapPosition.y }}
             initial={{ width: 0, height: 0 }}
-            animate={{ width: 300, height: 300, opacity: 0 }}
+            animate={{ width: 500, height: 500, opacity: 0 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
             onAnimationComplete={() => setShowRipple(false)}
           />
         )}
@@ -220,26 +226,17 @@ const EXcoinLoadingPage = () => {
         </div>
 
         {/* Tap Instruction */}
-        {!isAuthenticated && !isLoading && (
-          <p className="text-blue-200 text-center animate-pulse">Tap anywhere to authenticate</p>
-        )}
+        <p className="text-blue-200 text-center animate-pulse">
+          {isAuthenticated
+            ? "Tap anywhere to access the protected page"
+            : "Tap anywhere to authenticate and continue"}
+        </p>
 
         {/* Loading Indicator */}
         {isLoading && (
           <div className="flex justify-center">
             <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
           </div>
-        )}
-
-        {/* Protected Page Access */}
-        {isAuthenticated && (
-          <button
-            type="button"
-            onClick={() => router.push("/protected")}
-            className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300"
-          >
-            Access Protected Page
-          </button>
         )}
       </div>
 
