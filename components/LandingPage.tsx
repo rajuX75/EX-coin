@@ -261,8 +261,8 @@ const EXcoinLoadingPage = () => {
               </motion.button>
             ))}
           </div>
-          <div className="text-emerald-200 text-center text-sm mb-8">
-            {activeTab === 'mine' && 'Mine EXcoin with your device'}
+          <div className="text-emerald-200 text-center text-sm mb-">
+            {activeTab === 'mine' && 'Mine EXcoin with  your device'}
             {activeTab === 'trade' && 'Trade EXcoin securely'}
             {activeTab === 'stats' && 'View your mining statistics'}
             {activeTab === 'secure' && 'Enhance your account security'}
