@@ -1,17 +1,18 @@
-import Navigation from "../components/Navigation";
+import React from 'react';
+import ClientWrapper from '../components/ClientWrapper';
 
-export default function RootLayout({
+export default function HomeLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="en">
-      <head></head>
-      <body>
-        {children}
-        <Navigation />
-      </body>
-    </html>
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-purple-100 to-blue-100">
+      <ClientWrapper>
+        <main className="flex-grow p-4 pb-24">
+          {children}
+        </main>
+      </ClientWrapper>
+    </div>
   );
 }
