@@ -107,7 +107,7 @@ export default function SplashScreen() {
             title: "Authentication Successful",
             description: "Welcome to EXcoin!",
           });
-          router.push("/protected");
+          router.push("/home");
         } else {
           throw new Error("Authentication failed");
         }
@@ -132,7 +132,7 @@ export default function SplashScreen() {
     setShowRipple(true);
     if (!isLoading) {
       if (isAuthenticated) {
-        router.push("/protected");
+        router.push("/home");
       } else {
         authenticateUser();
       }

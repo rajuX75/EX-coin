@@ -17,7 +17,7 @@ const Navigation: React.FC = () => {
   const router = useRouter();
 
   const navItems: NavItem[] = [
-    { name: 'Home', icon: HomeIcon, path: '/' },
+    { name: 'Home', icon: HomeIcon, path: '/home' },
     { name: 'Earn', icon: DollarSignIcon, path: '/earn' },
     { name: 'Task', icon: ListTodoIcon, path: '/task' },
     { name: 'Me', icon: UserIcon, path: '/me' },

@@ -1,4 +1,5 @@
-import PageWrapper from '../components/PageWrapper';
+import PageWrapper from "@/app/components/PageWrapper";
+
 
 export default function Task() {
   return (
