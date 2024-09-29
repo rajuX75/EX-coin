@@ -1,9 +1,10 @@
-import React from 'react'
+import PageWrapper from "../components/PageWrapper";
 
-const page = () => {
+
+export default function Home() {
   return (
-    <div>page</div>
-  )
+    <PageWrapper title="Home">
+      <p className="text-gray-600">Welcome to the home page!</p>
+    </PageWrapper>
+  );
 }
-
-export default page

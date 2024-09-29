@@ -4,7 +4,7 @@ import ReferralSystem from "@/components/ReferralSystem";
 import { useEffect, useState } from "react";
 
 
-export default function Home() {
+export default function ReferralPage() {
   const [initData, setInitData] = useState("");
   const [userId, setUserId] = useState("");
   const [startParam, setStartParam] = useState("");
