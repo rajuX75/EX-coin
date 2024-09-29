@@ -19,15 +19,19 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer 
 } from 'recharts';
 
+
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState('personal');
 
   const personalInfo = {
+    id: 123456,
     name: 'Jane Doe',
     email: 'jane.doe@example.com',
     phone: '+1 (555) 123-4567',
     location: 'San Francisco, CA',
     occupation: 'Software Engineer',
+    achievements: [],
+    activityData: []
   };
 
   const achievements = [
