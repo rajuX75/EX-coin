@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { Prisma } from '@prisma/client'
 
 export async function POST(req: NextRequest) {
     try {
@@ -14,14 +15,23 @@ export async function POST(req: NextRequest) {
         })
 
         if (!user) {
-            user = await prisma.user.create({
-                data: {
-                    telegramId: userData.id,
-                    username: userData.username || '',
-                    firstName: userData.first_name || '',
-                    lastName: userData.last_name || ''
+            try {
+                user = await prisma.user.create({
+                    data: {
+                        telegramId: userData.id,
+                        username: userData.username || '',
+                        firstName: userData.first_name || '',
+                        lastName: userData.last_name || ''
+                    }
+                })
+            } catch (error) {
+                if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                    if (error.code === 'P2002') {
+                        return NextResponse.json({ error: 'User already exists' }, { status: 409 })
+                    }
                 }
-            })
+                throw error
+            }
         }
 
         return NextResponse.json(user)
