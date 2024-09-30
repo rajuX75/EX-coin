@@ -19,9 +19,7 @@ export async function POST(req: NextRequest) {
                     telegramId: userData.id,
                     username: userData.username || '',
                     firstName: userData.first_name || '',
-                    lastName: userData.last_name || '',
-                    name: `${userData.first_name || ''} ${userData.last_name || ''}`.trim() || 'Unknown',
-                    email: `user${userData.id}@excoin.dev`, // You might want to generate this differently
+                    lastName: userData.last_name || ''
                 }
             })
         }

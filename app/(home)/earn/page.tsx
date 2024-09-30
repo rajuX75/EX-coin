@@ -1,7 +1,8 @@
 "use client";
-import PageWrapper from "@/app/components/PageWrapper";
+
 import { useEffect, useState } from "react";
 import { WebApp } from "@twa-dev/types";
+import PageWrapper from "@/app/components/PageWrapper";
 
 declare global {
   interface Window {
@@ -11,7 +12,7 @@ declare global {
   }
 }
 
-export default function Earn() {
+export default function Home() {
   const [user, setUser] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [notification, setNotification] = useState("");
